@@ -31,4 +31,8 @@ app.post("/api/search", async (req, res) => {
   }
 });
 
+app.post("/api/active", (req, res) => {
+  return res.json({ isSuccess: true, message: "Server is up !" });
+});
+
 export default app;
