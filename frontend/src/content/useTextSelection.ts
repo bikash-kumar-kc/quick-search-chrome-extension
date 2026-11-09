@@ -19,7 +19,8 @@ export function useTextSelection() {
         const sel = window.getSelection();
         const text = sel?.toString().trim();
         if (!sel || !text) return setSelection(null);
-        if (text.split("").length > 10) return setSelection(null);
+        const wordCount = text.split(/\s+/).length;
+        if (wordCount > 10) return setSelection(null);
 
         const rect = sel.getRangeAt(0).getBoundingClientRect();
         setSelection({ text, x: rect.left + rect.width / 2, y: rect.bottom });
