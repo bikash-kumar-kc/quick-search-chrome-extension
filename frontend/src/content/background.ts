@@ -1,6 +1,9 @@
 chrome.runtime.onMessage.addListener(
   (
-    msg: { type: "SEARCH"; query: string },
+    msg: {
+      type: "SEARCH";
+      messageHistory: { role: "user" | "assistant"; content: string }[];
+    },
     _sender,
     sendResponse: ({
       ok,
@@ -15,7 +18,7 @@ chrome.runtime.onMessage.addListener(
       fetch("http://localhost:8000/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: msg.query }),
+        body: JSON.stringify({ messageHistory: msg.messageHistory }),
       })
         .then((res) => res.json())
         .then((data) => sendResponse({ ok: true, data }))
