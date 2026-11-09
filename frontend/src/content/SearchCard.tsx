@@ -88,9 +88,7 @@ export function SearchCard({
           {status === "loading" && <p className="text-gray-500">Thinking…</p>}
           {status === "done" && <p className="whitespace-pre-wrap">{answer}</p>}
           {status === "error" && (
-            <p className="text-red-600">
-              {error.trim() ? error : "Failed to Generate Response"}
-            </p>
+            <p className="text-red-600">Failed to generte the response.</p>
           )}
         </div>
       )}
