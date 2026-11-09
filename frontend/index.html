@@ -5,9 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>quick-search</title>
+    <style>
+      body {
+        width: 100%;
+        min-height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        color:white;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"><h1>hello</h1></div>
+    <div id="root">
+      <div className="flex justify-center items-center w-full h-screen">
+        <h1>hello</h1>
+      </div>
+    </div>
     <script type="module" src="/src/content/main.tsx"></script>
   </body>
 </html>
