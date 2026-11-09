@@ -1,31 +1,41 @@
 import { useState } from "react";
 
-type Props = { initialQuery: string; onClose: () => void };
+type Props = {
+  initialQuery: string;
+  onClose: () => void;
+  updateMessage: (role: "user" | "assistant", content: string) => void;
+  messages: { role: "user" | "assistant"; content: string }[] | undefined;
+};
 type Status = "idle" | "loading" | "done" | "error";
 
-export function SearchCard({ initialQuery, onClose }: Props) {
+export function SearchCard({
+  initialQuery,
+  onClose,
+  updateMessage,
+  messages,
+}: Props) {
   const [query, setQuery] = useState(initialQuery);
-  const [status, setStatus] = useState<Status>("done");
+  const [status, setStatus] = useState<Status>("idle");
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
 
   const search = async () => {
     const q = query.trim();
     if (!q || status === "loading") return;
-    // if (!chrome.runtime?.id) {
-    //   setError("Extension was reloaded. Please refresh this page.");
-    //   setStatus("error");
-    //   return;
-    // }
 
     setStatus("loading");
     try {
       const res = await chrome.runtime.sendMessage({
         type: "SEARCH",
-        query: q,
+        messageHistory:
+          typeof messages === "undefined"
+            ? [{ role: "user", content: q }]
+            : [...messages, { role: "user", content: q }],
       });
       if (!res?.ok) throw new Error(res?.error ?? "No response");
       setAnswer(res.data.answer);
+      updateMessage("user", q);
+      updateMessage("assistant", res.data.answer);
       setStatus("done");
     } catch (e) {
       console.log(e);
