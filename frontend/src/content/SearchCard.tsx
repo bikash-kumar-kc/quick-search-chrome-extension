@@ -17,6 +17,7 @@ export function SearchCard({
   const [query, setQuery] = useState(initialQuery);
   const [status, setStatus] = useState<Status>("idle");
   const [answer, setAnswer] = useState("");
+  //@ts-ignore
   const [error, setError] = useState("");
 
   const search = async () => {
