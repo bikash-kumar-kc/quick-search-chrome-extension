@@ -5,7 +5,7 @@ type Status = "idle" | "loading" | "done" | "error";
 
 export function SearchCard({ initialQuery, onClose }: Props) {
   const [query, setQuery] = useState(initialQuery);
-  const [status, setStatus] = useState<Status>("idle");
+  const [status, setStatus] = useState<Status>("done");
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
 
@@ -36,18 +36,17 @@ export function SearchCard({ initialQuery, onClose }: Props) {
 
   return (
     <div
-      // stop the website's keyboard shortcuts from firing while typing here
       onKeyDown={(e) => e.stopPropagation()}
       onKeyUp={(e) => e.stopPropagation()}
       onKeyPress={(e) => e.stopPropagation()}
-      className="fixed right-4 top-1/2 z-[2147483647] flex max-h-[80vh] w-80 -translate-y-1/2 flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 text-gray-900 shadow-2xl"
+      className="fixed right-4 top-1/2 z-[2147483647] flex max-h-[80vh] w-80 -translate-y-1/2 flex-col gap-3 rounded-lg  bg-[#191818]  p-4 text-gray-900 shadow-2xl transition-colors"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold">Quick Search</h2>
+        <h2 className="text-lg font-semibold text-gray-200">Quick Search</h2>
         <button
           onClick={onClose}
           aria-label="Close"
-          className="rounded p-1 text-gray-500 hover:bg-gray-100"
+          className="rounded px-2 py-0.5 text-gray-500 hover:text-gray-50 hover:bg-red-700"
         >
           ✕
         </button>
@@ -63,22 +62,26 @@ export function SearchCard({ initialQuery, onClose }: Props) {
           }
         }}
         rows={3}
-        className="w-full resize-none rounded-lg border border-gray-300 p-2 text-sm text-gray-900 outline-none focus:border-indigo-500"
+        className="w-full resize-none rounded-md  p-2 text-md text-gray-200  bg-[#242222] outline-none focus:ring-1 focus:ring-gray-600"
       />
 
       <button
         onClick={search}
         disabled={status === "loading" || !query.trim()}
-        className="rounded-lg bg-indigo-600 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
+        className="rounded-lg bg-[#2d2b2b] hover:bg-[#201f1f] py-2 text-sm font-medium text-white transition-all disabled:opacity-50"
       >
         {status === "loading" ? "Searching…" : "Search"}
       </button>
 
       {status !== "idle" && (
-        <div className="min-h-[3rem] overflow-y-auto rounded-lg bg-gray-50 p-3 text-sm leading-relaxed">
+        <div className="min-h-[3rem] overflow-auto rounded-md bg-gray-300 py-1 px-2 text-sm leading-relaxed text-wrap">
           {status === "loading" && <p className="text-gray-500">Thinking…</p>}
           {status === "done" && <p className="whitespace-pre-wrap">{answer}</p>}
-          {status === "error" && <p className="text-red-600">{error}</p>}
+          {status === "error" && (
+            <p className="text-red-600">
+              {error.trim() ? error : "Failed to Generate Response"}
+            </p>
+          )}
         </div>
       )}
     </div>
