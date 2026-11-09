@@ -13,11 +13,13 @@ export function useTextSelection() {
 
     const onMouseUp = (e: MouseEvent) => {
       if (isOurs(e)) return;
+
       // wait a tick so the browser finalizes the selection
       setTimeout(() => {
         const sel = window.getSelection();
         const text = sel?.toString().trim();
         if (!sel || !text) return setSelection(null);
+        if (text.split("").length > 10) return setSelection(null);
 
         const rect = sel.getRangeAt(0).getBoundingClientRect();
         setSelection({ text, x: rect.left + rect.width / 2, y: rect.bottom });
