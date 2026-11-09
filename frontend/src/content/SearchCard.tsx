@@ -29,7 +29,7 @@ export function SearchCard({ initialQuery, onClose }: Props) {
       setStatus("done");
     } catch (e) {
       console.log(e);
-      setError(e instanceof Error ? e.message : "Something went wrong");
+      setError(JSON.stringify);
       setStatus("error");
     }
   };
