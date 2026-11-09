@@ -1,16 +1,14 @@
-// src/content/SearchPopup.tsx
 type Props = { x: number; y: number; onClick: () => void };
 
 export function SearchPopup({ x, y, onClick }: Props) {
   return (
     <button
-      onMouseDown={(e) => e.preventDefault()} // keeps the text selected
+      onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
-      style={{ left: x, top: y + 8 }}
-      className="fixed z-[2147483647] -translate-x-1/2 rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white shadow-lg hover:bg-indigo-500"
+      style={{ left: x + 8, top: y + 8 }}
+      className="fixed z-[2147483647] -translate-x-1/2 rounded-lg bg-[#191818] px-3 py-1.5 text-md font-medium tracking-tight text-white shadow-sm hover:shadow-md hover:bg-[#2d2b2b] transition-colors"
     >
-      Search
-      <span className="text-red-600">hey</span>
+      Quick Search
     </button>
   );
 }
