@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener(
     }) => void,
   ) => {
     if (msg.type === "SEARCH") {
-      fetch(import.meta.env.VITE_EXTERNAL_API, {
+      fetch("http://localhost:8000/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messageHistory: msg.messageHistory }),
