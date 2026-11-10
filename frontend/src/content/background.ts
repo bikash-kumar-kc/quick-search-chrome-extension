@@ -1,3 +1,28 @@
+const BASE_URL = "http://localhost:8000/api";
+const EXTRA_ROUTES: Record<string, string> = {
+  VARIANTS: "/variants",
+  GUESS: "/guess",
+};
+
+chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+  const path = EXTRA_ROUTES[msg.type];
+  if (!path) return; // not ours, your SEARCH listener handles it
+
+  fetch(`${BASE_URL}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ word: msg.word }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error(`Server error ${res.status}`);
+      return res.json();
+    })
+    .then((data) => sendResponse({ ok: true, data }))
+    .catch((err) => sendResponse({ ok: false, error: err.message }));
+
+  return true;
+});
+
 chrome.runtime.onMessage.addListener(
   (
     msg: {
