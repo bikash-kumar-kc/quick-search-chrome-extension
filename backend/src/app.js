@@ -6,6 +6,9 @@ const app = express();
 
 app.use(express.json());
 
+const validWord = (w) =>
+  typeof w === "string" && w.length <= 40 && /^[\p{L}][\p{L}'’-]*$/u.test(w);
+
 app.get("/", (req, res) => {
   return res
     .status(200)
@@ -28,6 +31,34 @@ app.post("/api/search", async (req, res) => {
     res.status(201).json({ answer });
   } catch (err) {
     res.status(500).json({ error: "Search failed" });
+  }
+});
+
+app.post("/api/variants", async (req, res) => {
+  const { word } = req.body;
+  if (!validWord(word)) return res.status(400).json({ error: "Invalid word" });
+  try {
+    const llmClient = new GrokClient(
+      process.env.GROQ_API_KEY_VARIANTS,
+      process.env.GROQ_API_MODEL,
+    );
+    res.json({ variants: await llmClient.variants(word) });
+  } catch {
+    res.status(500).json({ error: "Variants failed" });
+  }
+});
+
+app.post("/api/guess", async (req, res) => {
+  const { word } = req.body;
+  if (!validWord(word)) return res.status(400).json({ error: "Invalid word" });
+  try {
+    const llmClient = new GrokClient(
+      process.env.GROQ_API_KEY_GUESS,
+      process.env.GROQ_API_MODEL,
+    );
+    res.json({ sentence: await llmClient.guess(word) });
+  } catch {
+    res.status(500).json({ error: "Guess failed" });
   }
 });
 
