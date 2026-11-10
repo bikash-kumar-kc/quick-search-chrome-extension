@@ -93,6 +93,88 @@ Now explain the meaning of the user's given word or words using these rules.
       throw error;
     }
   };
+
+  variants = async (word) => {
+    if (!word) throw new Error("Word is missing");
+
+    const shot = (w, list) => [
+      { role: "user", content: w },
+      { role: "assistant", content: JSON.stringify({ variants: list }) },
+    ];
+
+    const response = await this.client.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content:
+            'You list the inflected forms of an English word: tense, number, comparison and third-person forms. Include the word itself. Lowercase only. Only forms of the same word, never related words (no "happiness" for "happy"). If the input is an inflected form, return its base word and all forms. Respond with JSON: {"variants": [...]}.',
+        },
+        ...shot("run", ["run", "runs", "running", "ran"]),
+        ...shot("mice", ["mouse", "mice"]),
+        ...shot("happier", ["happy", "happier", "happiest"]),
+        { role: "user", content: word },
+      ],
+      model: this.model,
+      temperature: 0,
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "variants_schema",
+          strict: true,
+          schema: {
+            type: "object",
+            properties: {
+              variants: { type: "array", items: { type: "string" } },
+            },
+            required: ["variants"],
+            additionalProperties: false,
+          },
+        },
+      },
+    });
+
+    const parsed = JSON.parse(response.choices[0].message.content);
+    return [
+      ...new Set(parsed.variants.map((v) => v.toLowerCase().trim())),
+    ].slice(0, 12);
+  };
+
+  guess = async (word) => {
+    if (!word) throw new Error("Word is missing");
+
+    const response = await this.client.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content:
+            "Write ONE natural sentence (12-25 words) that uses the given word exactly as written, in its most common meaning. Give strong context clues so a learner can infer the meaning. Never define the word. Output only the sentence.",
+        },
+        { role: "user", content: "reluctant" },
+        {
+          role: "assistant",
+          content:
+            "Maya was reluctant to speak in front of the class, so she kept staring at the floor and hoped the teacher wouldn't call her name.",
+        },
+        { role: "user", content: "running" },
+        {
+          role: "assistant",
+          content:
+            "He spent the whole morning running along the river, and by the time he got home his shirt was soaked with sweat.",
+        },
+        { role: "user", content: "bank" },
+        {
+          role: "assistant",
+          content:
+            "After three days of heavy rain, the river rose over its bank and flooded the nearby fields.",
+        },
+        { role: "user", content: word },
+      ],
+      model: this.model,
+      temperature: 0.7,
+    });
+
+    return response.choices[0].message.content.trim();
+  };
 }
 
 export default GrokClient;
