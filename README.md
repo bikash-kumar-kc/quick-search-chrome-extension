@@ -28,6 +28,6 @@ Some pics:
 
 ![quick_extension_ui](./frontend/public/pic_5.png)
 
-![quick_extension_ui](./frontend/public/pic_6.png)
+
 
 
