@@ -5,7 +5,7 @@ import { SearchPopup } from "./searchPopup";
 
 export default function App() {
   const selection = useTextSelection();
-  const [card, setCard] = useState<{ id: number; query: string } | null>(null);
+  const [card, setCard] = useState<{ id: number; query: string; sentence: string } | null>(null);
   const [messages, setMessages] = useState<
     { role: "user" | "assistant"; content: string }[] | undefined
   >(undefined);
@@ -29,7 +29,7 @@ export default function App() {
         <SearchPopup
           x={selection.x}
           y={selection.y}
-          onClick={() => setCard({ id: Date.now(), query: selection.text })}
+          onClick={() => setCard({ id: Date.now(), query: selection.text, sentence: selection.sentence })}
         />
       )}
       {card && (
@@ -42,6 +42,7 @@ export default function App() {
           }}
           updateMessage={handleMessageChange}
           messages={messages}
+          sentence={card.sentence}
         />
       )}
     </>
