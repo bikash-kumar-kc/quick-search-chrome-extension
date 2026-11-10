@@ -13,4 +13,5 @@ export default defineManifest({
       css: ["src/content/content.css"], // css file
     },
   ],
+  permissions: ["storage"], // for storing
 });
