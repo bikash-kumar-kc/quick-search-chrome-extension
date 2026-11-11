@@ -13,7 +13,7 @@ export default defineManifest({
       css: ["src/content/content.css"], // css file
     },
   ],
-  permissions: ["storage"], // for storing
+  permissions: ["storage","offscreen"], // for storing and for offscreen works.
   commands: {
     "open-search-card": {
       suggested_key: { default: "Alt+Shift+S" },
