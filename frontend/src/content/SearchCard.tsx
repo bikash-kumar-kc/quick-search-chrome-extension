@@ -8,6 +8,9 @@ import {
 } from "./wordStore";
 import { fetchGuess, fetchVariants } from "./wordApi";
 import { SpeakButton } from "./SpeechButton";
+import { useLayoutEffect, useRef } from "react"; // add to your existing react import
+import { Mic, Square } from "lucide-react";
+import { useMic } from "./useMic";
 
 type Panel = "answer" | "guess" | "refs";
 
@@ -37,30 +40,9 @@ export function SearchCard({
   const [panel, setPanel] = useState<Panel>("answer");
   const [guessText, setGuessText] = useState("");
 
-  // const search = async () => {
-  //   const q = query.trim();
-  //   if (!q || status === "loading") return;
+  const taRef = useRef<HTMLTextAreaElement>(null);
 
-  //   setStatus("loading");
-  //   try {
-  //     const res = await chrome.runtime.sendMessage({
-  //       type: "SEARCH",
-  //       messageHistory:
-  //         typeof messages === "undefined"
-  //           ? [{ role: "user", content: q }]
-  //           : [...messages, { role: "user", content: q }],
-  //     });
-  //     if (!res?.ok) throw new Error(res?.error ?? "No response");
-  //     setAnswer(res.data.answer);
-  //     updateMessage("user", q);
-  //     updateMessage("assistant", res.data.answer);
-  //     setStatus("done");
-  //   } catch (e) {
-  //     console.log(e);
-  //     setError(JSON.stringify);
-  //     setStatus("error");
-  //   }
-  // };
+  const { recording, micError, toggle } = useMic((t) => setQuery(t));
 
   // only keep the page sentence if the (possibly edited) query is actually in it
   const referenceFor = (w: string) =>
@@ -127,6 +109,13 @@ export function SearchCard({
     setStatus("done");
   };
 
+  useLayoutEffect(() => {
+    const el = taRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+  }, [query]);
+
   return (
     <div
       onKeyDown={(e) => e.stopPropagation()}
@@ -148,19 +137,33 @@ export function SearchCard({
         </div>
       </div>
 
-      <textarea
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            handleSearch();
-          }
-        }}
-        rows={3}
-        autoFocus
-        className="w-full resize-none rounded-md  p-2 text-md text-gray-200  bg-[#242222] outline-none focus:ring-1 focus:ring-gray-600"
-      />
+      <div className="flex items-end gap-2">
+        <textarea
+          ref={taRef}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSearch();
+            }
+          }}
+          rows={1}
+          className="w-full resize-none overflow-y-auto rounded-md bg-[#242222] p-2 text-gray-200 outline-none focus:ring-1 focus:ring-gray-600"
+        />
+        <button
+          onClick={toggle}
+          aria-label={recording ? "Stop recording" : "Start recording"}
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-colors ${
+            recording
+              ? "animate-pulse bg-red-600 text-white"
+              : "bg-[#2d2b2b] text-gray-300 hover:bg-[#3a3737]"
+          }`}
+        >
+          {recording ? <Square size={16} /> : <Mic size={18} />}
+        </button>
+      </div>
+      {micError && <p className="text-xs text-red-400">{micError}</p>}
 
       {repeat && (
         <RepeatPanel
