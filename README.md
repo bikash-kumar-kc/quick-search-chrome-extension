@@ -13,8 +13,12 @@ So, I built a browser extension to make that process a little easier.
 - Confused by a word or phrase? **Just select it and do a quick search.**
 - Want to understand it better? **Ask follow-up questions right there.**
 - Need an example? **Ask for one without leaving the page.**
+- See the same word again? **Instead of looking it up repeatedly, try recalling its meaning from memory.**
+- Need a quick reminder? **Recall the word using the exact sentence where you first saw it or its simple meaning.**
 
-The goal is simple: **understand things without constantly switching tabs.**
+The idea is not just to help you **look up words**, but also to help you **remember them**.
+
+Instead of re-reading the same word and meaning again and again, you can practice recalling it when you encounter it again.
 
 Some pics: 
 
@@ -27,5 +31,9 @@ Some pics:
 ![quick_extension_ui](./frontend/public/pic_4.png)
 
 ![quick_extension_ui](./frontend/public/pic_5.png)
+
+![quick_extension_ui](./frontend/public/pic_6.png)
+
+
 
 
