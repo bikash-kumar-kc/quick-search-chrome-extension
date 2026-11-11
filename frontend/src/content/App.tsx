@@ -33,11 +33,15 @@ export default function App() {
 
       const sel = window.getSelection();
       const text = sel?.toString().trim() ?? "";
-      setCard({
-        id: Date.now(),
-        query: text,
-        sentence: sel && text ? getSentence(sel, text) : "",
-      });
+      setCard((prevs) =>
+        prevs
+          ? null
+          : {
+              id: Date.now(),
+              query: text,
+              sentence: sel && text ? getSentence(sel, text) : "",
+            },
+      );
     };
 
     chrome.runtime.onMessage.addListener(onMessage);
