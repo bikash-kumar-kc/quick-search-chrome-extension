@@ -17,6 +17,7 @@ So, I built a browser extension to make that process a little easier.
 - Need a quick reminder? **Recall the word using the exact sentence where you first saw it or its simple meaning.**
 - I need pronunciation? **Okay**
 - I want to search but I do not like to type? **Okay, you can speak?**
+- I want to move the search card? **Okay, you can drag anywhere you want. And top tap on *Quick Search* to reset the position**
 
 The idea is not just to help you **look up words**, but also to help you **remember them**.
 
@@ -40,6 +41,8 @@ Some pics:
 ![quick_extension_ui](./frontend/public/pic_6.png)
 
 ![quick_extension_ui](./frontend/public/pic_7.png)
+
+![quick_extension_ui](./frontend/public/pic_8.png)
 
 
 
