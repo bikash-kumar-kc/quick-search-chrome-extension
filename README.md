@@ -20,6 +20,9 @@ The idea is not just to help you **look up words**, but also to help you **remem
 
 Instead of re-reading the same word and meaning again and again, you can practice recalling it when you encounter it again.
 
+## Short cut key.
+- What if i can not select the text or content? **Just press *Alt+Shift+S* then search.**
+
 Some pics: 
 
 ![quick_extension_ui](./frontend/public/pic_1.png)
