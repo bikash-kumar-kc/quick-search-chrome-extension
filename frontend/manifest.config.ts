@@ -14,4 +14,10 @@ export default defineManifest({
     },
   ],
   permissions: ["storage"], // for storing
+  commands: {
+    "open-search-card": {
+      suggested_key: { default: "Alt+Shift+S" },
+      description: "Open Quick Search card",
+    },
+  }, // for short cut key.
 });
