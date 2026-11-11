@@ -157,7 +157,7 @@ export function SearchCard({
           aria-label={
             micStatus === "recording" ? "Stop recording" : "Start recording"
           }
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-colors disabled:opacity-70 ${
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md transition-colors disabled:opacity-70 ${
             micStatus === "recording"
               ? "animate-pulse bg-red-600 text-white"
               : "bg-[#2d2b2b] text-gray-300 hover:bg-[#3a3737]"
