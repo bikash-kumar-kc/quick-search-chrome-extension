@@ -15,6 +15,7 @@ So, I built a browser extension to make that process a little easier.
 - Need an example? **Ask for one without leaving the page.**
 - See the same word again? **Instead of looking it up repeatedly, try recalling its meaning from memory.**
 - Need a quick reminder? **Recall the word using the exact sentence where you first saw it or its simple meaning.**
+- I need pronunciation? **Okay**
 
 The idea is not just to help you **look up words**, but also to help you **remember them**.
 
