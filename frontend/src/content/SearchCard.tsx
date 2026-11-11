@@ -154,6 +154,7 @@ export function SearchCard({
           }
         }}
         rows={3}
+        autoFocus
         className="w-full resize-none rounded-md  p-2 text-md text-gray-200  bg-[#242222] outline-none focus:ring-1 focus:ring-gray-600"
       />
 
