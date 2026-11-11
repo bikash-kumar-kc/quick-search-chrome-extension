@@ -1,4 +1,4 @@
-import Groq from "groq-sdk";
+import Groq, { toFile } from "groq-sdk";
 
 class GrokClient {
   client;
@@ -174,6 +174,18 @@ Now explain the meaning of the user's given word or words using these rules.
     });
 
     return response.choices[0].message.content.trim();
+  };
+
+  transcribe = async (buffer) => {
+    const file = await toFile(buffer, "speech.webm", { type: "audio/webm" });
+    const result = await this.client.audio.transcriptions.create({
+      file,
+      model: "whisper-large-v3-turbo",
+      language: "en",
+      temperature: 0,
+      response_format: "json",
+    });
+    return result.text.trim();
   };
 }
 
