@@ -1,4 +1,4 @@
-const BASE_URL = "https://quick-search-chrome-extension.onrender.com/api";
+const BASE_URL = "http://localhost:8000/api";
 const EXTRA_ROUTES: Record<string, string> = {
   VARIANTS: "/variants",
   GUESS: "/guess",
@@ -40,7 +40,7 @@ chrome.runtime.onMessage.addListener(
     }) => void,
   ) => {
     if (msg.type === "SEARCH") {
-      fetch("https://quick-search-chrome-extension.onrender.com/api/search", {
+      fetch("http://localhost:8000/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messageHistory: msg.messageHistory }),
