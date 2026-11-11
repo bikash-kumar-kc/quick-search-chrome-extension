@@ -9,33 +9,34 @@ export type SelectionInfo = {
   sentence: string;
 };
 
+export function getSentence(sel: Selection, text: string): string {
+  const block = sel.anchorNode?.parentElement?.closest(
+    "p, li, td, blockquote, h1, h2, h3, h4, h5, h6, div",
+  );
+  const full = (block?.textContent ?? "").replace(/\s+/g, " ");
+  const i = full.indexOf(text);
+  if (i === -1) return "";
+
+  const before = Math.max(
+    full.lastIndexOf(". ", i),
+    full.lastIndexOf("? ", i),
+    full.lastIndexOf("! ", i),
+  );
+  const ends = [". ", "? ", "! "]
+    .map((p) => full.indexOf(p, i + text.length))
+    .filter((n) => n !== -1);
+  const end = ends.length ? Math.min(...ends) + 1 : full.length;
+
+  return full
+    .slice(before === -1 ? 0 : before + 2, end)
+    .trim()
+    .slice(0, 300);
+}
+
 export function useTextSelection() {
   const [selection, setSelection] = useState<SelectionInfo | null>(null);
 
   // get sentence where the word exist.
-  function getSentence(sel: Selection, text: string): string {
-    const block = sel.anchorNode?.parentElement?.closest(
-      "p, li, td, blockquote, h1, h2, h3, h4, h5, h6, div",
-    );
-    const full = (block?.textContent ?? "").replace(/\s+/g, " ");
-    const i = full.indexOf(text);
-    if (i === -1) return "";
-
-    const before = Math.max(
-      full.lastIndexOf(". ", i),
-      full.lastIndexOf("? ", i),
-      full.lastIndexOf("! ", i),
-    );
-    const ends = [". ", "? ", "! "]
-      .map((p) => full.indexOf(p, i + text.length))
-      .filter((n) => n !== -1);
-    const end = ends.length ? Math.min(...ends) + 1 : full.length;
-
-    return full
-      .slice(before === -1 ? 0 : before + 2, end)
-      .trim()
-      .slice(0, 300);
-  }
 
   useEffect(() => {
     const isOurs = (e: Event) => (e.target as HTMLElement)?.id === HOST_ID;
