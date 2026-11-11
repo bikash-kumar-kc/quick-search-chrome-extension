@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDrag } from "./useDrag";
 import { RepeatPanel, ReferenceList } from "./RepeatPanel";
 import {
   isSingleWord,
@@ -43,6 +44,10 @@ export function SearchCard({
   const taRef = useRef<HTMLTextAreaElement>(null);
 
   const { status: micStatus, micError, toggle } = useMic((t) => setQuery(t));
+
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const { offset, ready, handleProps } = useDrag(cardRef);
 
   // only keep the page sentence if the (possibly edited) query is actually in it
   const referenceFor = (w: string) =>
@@ -118,12 +123,21 @@ export function SearchCard({
 
   return (
     <div
+      ref={cardRef}
+      style={{
+        translate: `${offset.x}px ${offset.y}px`,
+        visibility: ready ? "visible" : "hidden",
+      }}
       onKeyDown={(e) => e.stopPropagation()}
       onKeyUp={(e) => e.stopPropagation()}
       onKeyPress={(e) => e.stopPropagation()}
       className="fixed right-4 top-1/2 z-[2147483647] flex max-h-[80vh] w-80 -translate-y-1/2 flex-col gap-3 rounded-lg  bg-[#191818]  p-4 text-gray-900 shadow-2xl transition-colors"
     >
-      <div className="flex items-center justify-between">
+      <div
+        {...handleProps}
+        title="Drag to move, double-click to reset"
+        className="flex cursor-grab touch-none select-none items-center justify-between active:cursor-grabbing "
+      >
         <h2 className="text-lg font-semibold text-gray-200">Quick Search</h2>
         <div className="flex flex-wrap gap-3">
           <SpeakButton text={query.trim()} />
