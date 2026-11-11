@@ -12,4 +12,12 @@ export default defineConfig({
       plugins: [tailwindcss(), autoprefixer()],
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        offscreen: "src/content/offscreen/offscreen.html",
+        permission: "src/content/permission/permission.html",
+      },
+    },
+  },
 });
