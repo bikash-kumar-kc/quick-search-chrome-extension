@@ -53,3 +53,14 @@ chrome.runtime.onMessage.addListener(
     return true;
   },
 );
+
+
+chrome.commands.onCommand.addListener(async (command) => {
+  if (command !== "open-search-card") return;
+
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tab?.id) {
+    // fails on pages with no content script (chrome://, Web Store), so ignore it
+    chrome.tabs.sendMessage(tab.id, { type: "OPEN_CARD" }).catch(() => {});
+  }
+});
