@@ -9,7 +9,7 @@ import {
 import { fetchGuess, fetchVariants } from "./wordApi";
 import { SpeakButton } from "./SpeechButton";
 import { useLayoutEffect, useRef } from "react"; // add to your existing react import
-import { Mic, Square } from "lucide-react";
+import { Mic, Square, Loader2 } from "lucide-react";
 import { useMic } from "./useMic";
 
 type Panel = "answer" | "guess" | "refs";
@@ -42,7 +42,7 @@ export function SearchCard({
 
   const taRef = useRef<HTMLTextAreaElement>(null);
 
-  const { recording, micError, toggle } = useMic((t) => setQuery(t));
+  const { status: micStatus, micError, toggle } = useMic((t) => setQuery(t));
 
   // only keep the page sentence if the (possibly edited) query is actually in it
   const referenceFor = (w: string) =>
@@ -153,14 +153,23 @@ export function SearchCard({
         />
         <button
           onClick={toggle}
-          aria-label={recording ? "Stop recording" : "Start recording"}
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-colors ${
-            recording
+          disabled={micStatus === "transcribing"}
+          aria-label={
+            micStatus === "recording" ? "Stop recording" : "Start recording"
+          }
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-colors disabled:opacity-70 ${
+            micStatus === "recording"
               ? "animate-pulse bg-red-600 text-white"
               : "bg-[#2d2b2b] text-gray-300 hover:bg-[#3a3737]"
           }`}
         >
-          {recording ? <Square size={16} /> : <Mic size={18} />}
+          {micStatus === "recording" ? (
+            <Square size={16} />
+          ) : micStatus === "transcribing" ? (
+            <Loader2 size={18} className="animate-spin" />
+          ) : (
+            <Mic size={18} />
+          )}
         </button>
       </div>
       {micError && <p className="text-xs text-red-400">{micError}</p>}
