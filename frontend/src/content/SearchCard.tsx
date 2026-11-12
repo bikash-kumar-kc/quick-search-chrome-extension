@@ -164,6 +164,7 @@ export function SearchCard({
           }}
           rows={1}
           className="w-full resize-none overflow-y-auto rounded-md bg-[#242222] p-2 text-gray-200 outline-none focus:ring-1 focus:ring-gray-600"
+          placeholder="Enter you word..."
         />
         <button
           onClick={toggle}
